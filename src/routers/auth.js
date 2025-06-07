@@ -4,6 +4,7 @@ import { validateBody } from "../utils/validateBody.js";
 import { authSignupSchema, authSigninSchema } from "../validation/auth.js";
 import {
   signupController,
+  verifyController,
   signinController,
   refreshController,
   signoutController,
@@ -16,6 +17,8 @@ authRouter.post(
   validateBody(authSignupSchema),
   ctrlWrapper(signupController)
 );
+
+authRouter.get("/verify", ctrlWrapper(verifyController));
 
 authRouter.post(
   "/signin",

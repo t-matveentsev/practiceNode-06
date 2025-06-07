@@ -1,5 +1,6 @@
 import {
   signinUser,
+  verifyUser,
   signupUser,
   refreshUser,
   signoutUser,
@@ -23,6 +24,14 @@ export const signupController = async (req, res) => {
   res.status(201).json({
     status: 201,
     message: "Successfully register user",
+  });
+};
+
+export const verifyController = async (req, res) => {
+  await verifyUser(req.query.token);
+
+  res.json({
+    message: "Email verified",
   });
 };
 
