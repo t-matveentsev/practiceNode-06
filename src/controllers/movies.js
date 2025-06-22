@@ -11,6 +11,7 @@ import { parsePaginationParams } from "../utils/parsePaginationParams.js";
 import { parseSortParams } from "../utils/parseSortParams.js";
 import { movieSortFields } from "../db/models/Movie.js";
 import { parsMovieFilterParams } from "../utils/filters/parseMovieFilterParams.js";
+import { saveFile } from "../utils/saveFile.js";
 
 export const getMoviesController = async (req, res) => {
   const paginationParams = parsePaginationParams(req.query);
@@ -65,7 +66,13 @@ export const upsertMovieController = async (req, res) => {
 
 export const patchMovieController = async (req, res) => {
   const { id } = req.params;
-  const result = await updateMovie(id, req.body);
+  let posterUrl = null;
+
+  if (req.file) {
+    posterUrl = await saveFile(req.file);
+  }
+
+  const result = await updateMovie(id, { ...req.body, posterUrl });
 
   if (!result) {
     throw createHttpError(404, `Movie with id=${id} not found`);
